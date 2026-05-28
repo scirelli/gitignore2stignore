@@ -1,0 +1,22 @@
+#!/bin/sh
+# Convert .gitignore to SyncThing .stignore format
+# Usage: gitignore2stignore [file]
+#        cat .gitignore | gitignore2stignore
+
+set -e
+
+if [ $# -gt 0 ]; then
+    if [ ! -f "$1" ]; then
+        echo "Error: file not found: $1" >&2
+        exit 1
+    fi
+    input="$1"
+else
+    input=""
+fi
+
+sed -e 's/^[[:space:]]*$//' \
+    -e 's/\([^\\]\)[[:space:]]*$/\1/' \
+    -e 's/^[[:space:]]\{1,\}$//' \
+    -e 's/^#/\/\//' \
+    ${input:+"$input"}
